@@ -39,7 +39,7 @@ function RouteResult() {
         <div className="flex items-start justify-between gap-3">
           <div>
             <div className="text-xs text-muted-foreground">Rota sugerida</div>
-            <h1 className="text-xl font-bold">{fromT?.name || "Origem"} → {toT?.name || "Destino"}</h1>
+            <h1 className="text-xl font-bold">{fromName} → {toName}</h1>
             <div className="text-xs text-aqua font-medium mt-1">Mar: {route.conditions}</div>
           </div>
           <div className="text-right">
