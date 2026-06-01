@@ -15,8 +15,11 @@ function RouteResult() {
     const navigate = useNavigate();
     const route = activeRoute ?? suggestions[0];
     const isFav = favorites.includes(route.id);
-    const fromT = terminals.find((t) => t.id === route.from);
-    const toT = terminals.find((t) => t.id === route.to);
+    // Prefer the explicit label set when generating the route (origin → destination).
+    // Fall back to terminal lookup only when no label was provided.
+    const [labelFrom, labelTo] = (route.label || "").split("→").map((s) => s.trim());
+    const fromName = labelFrom || terminals.find((t) => t.id === route.from)?.name || "Origem";
+    const toName = labelTo || terminals.find((t) => t.id === route.to)?.name || "Destino";
     return (<AppShell>
       <div className="relative h-[55vh]">
         <ClientOnly fallback={<div className="size-full bg-ocean-light animate-pulse"/>}>
