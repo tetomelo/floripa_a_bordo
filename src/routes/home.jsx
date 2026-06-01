@@ -98,6 +98,9 @@ function Home() {
             {recentTrips.slice(0, 5).map((t) => (<button key={t.id} onClick={() => {
                     store.setRoute({
                         ...suggestions[0],
+                        id: `trip-${t.id}`,
+                        from: null,
+                        to: null,
                         label: `${t.origin} → ${t.destination}`,
                         path: [t.originCoords, t.destinationCoords],
                     });
