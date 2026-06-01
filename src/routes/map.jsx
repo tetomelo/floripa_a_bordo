@@ -54,7 +54,18 @@ function MapPage() {
         if (!origin || !destination)
             return;
         const best = suggestions[0];
-        store.setRoute({ ...best, label: `${origin.label} → ${destination.label}`, path: [origin.coords, destination.coords] });
+        // Resolve from/to terminal IDs from the chosen coordinates so we don't
+        // inherit suggestions[0]'s "t1 → t5" (which was forcing Centro → Sambaqui
+        // on every generated route).
+        const matchTerminal = (c) => terminals.find((t) => t.coords[0] === c[0] && t.coords[1] === c[1])?.id ?? null;
+        store.setRoute({
+            ...best,
+            id: `gen-${Date.now()}`,
+            from: matchTerminal(origin.coords),
+            to: matchTerminal(destination.coords),
+            label: `${origin.label} → ${destination.label}`,
+            path: [origin.coords, destination.coords],
+        });
         store.addTrip({
             origin: origin.label,
             destination: destination.label,
