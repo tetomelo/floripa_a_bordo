@@ -22,6 +22,10 @@ export default function Home() {
   return (
     <AppShell>
       <header className="px-5 pt-12 pb-4">
+        <div className="flex items-center gap-2 mb-3">
+          <Ship className="size-5 text-primary" />
+          <span className="text-lg font-bold tracking-tight">Floripa a Bordo</span>
+        </div>
         <p className="text-xs text-muted-foreground">Olá, navegante</p>
         <h1 className="text-2xl font-bold">{user?.name || "Bem-vindo"} 🌊</h1>
       </header>
