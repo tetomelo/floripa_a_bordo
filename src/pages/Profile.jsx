@@ -1,16 +1,24 @@
 import { useNavigate } from "react-router-dom";
-import { Settings, Heart, Clock, Bell, Shield, LogOut, ChevronRight, Crown } from "lucide-react";
+import { Settings, Heart, Clock, Bell, Shield, LogOut, ChevronRight, Crown, ArrowLeft, Moon, Sun } from "lucide-react";
 import AppShell from "@/components/AppShell.jsx";
 import { store, useApp } from "@/lib/app-store";
 
 export default function Profile() {
-  const { user, favorites } = useApp();
+  const { user, favorites, theme } = useApp();
   const navigate = useNavigate();
   const initials = (user?.name || "N N").split(" ").map((n) => n[0]).slice(0, 2).join("").toUpperCase();
+  const isDark = theme === "dark";
 
   return (
     <AppShell>
       <header className="bg-gradient-deep text-white px-5 pt-12 pb-10 rounded-b-[2rem]">
+        <button
+          onClick={() => navigate(-1)}
+          className="size-9 grid place-items-center rounded-full bg-white/15 mb-4"
+          aria-label="Voltar"
+        >
+          <ArrowLeft className="size-4" />
+        </button>
         <div className="flex items-center gap-4">
           <div className="size-16 rounded-2xl bg-white/15 grid place-items-center font-bold text-xl">{initials}</div>
           <div>
@@ -35,6 +43,29 @@ export default function Profile() {
         <Stat label="Viagens" value="12" />
         <Stat label="Favoritos" value={String(favorites.length)} />
         <Stat label="Pontos" value="340" />
+      </div>
+
+      <div className="px-5 mt-6">
+        <div className="flex items-center gap-3 rounded-2xl bg-card border border-border p-4">
+          {isDark ? <Moon className="size-4 text-primary" /> : <Sun className="size-4 text-primary" />}
+          <div className="flex-1">
+            <div className="text-sm font-medium">Modo escuro</div>
+            <div className="text-xs text-muted-foreground">
+              {isDark ? "Ativado" : "Desativado"} — alterne quando quiser.
+            </div>
+          </div>
+          <button
+            type="button"
+            role="switch"
+            aria-checked={isDark}
+            onClick={() => store.toggleTheme()}
+            className={`relative h-7 w-12 rounded-full transition-colors ${isDark ? "bg-primary" : "bg-muted"}`}
+          >
+            <span
+              className={`absolute top-0.5 size-6 rounded-full bg-card shadow transition-transform ${isDark ? "translate-x-5" : "translate-x-0.5"}`}
+            />
+          </button>
+        </div>
       </div>
 
       <ul className="mt-6 px-5 space-y-1.5">

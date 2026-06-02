@@ -1,4 +1,5 @@
-import { CloudSun, AlertTriangle, Tag, Route as RouteIcon } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { CloudSun, AlertTriangle, Tag, Route as RouteIcon, ArrowLeft } from "lucide-react";
 import AppShell from "@/components/AppShell.jsx";
 import { notifications } from "@/lib/mock-data";
 
@@ -11,9 +12,17 @@ const colorMap = {
 };
 
 export default function Notifications() {
+  const navigate = useNavigate();
   return (
     <AppShell>
       <header className="px-5 pt-12 pb-4">
+        <button
+          onClick={() => navigate(-1)}
+          className="size-9 grid place-items-center rounded-full bg-secondary mb-3"
+          aria-label="Voltar"
+        >
+          <ArrowLeft className="size-4" />
+        </button>
         <h1 className="text-2xl font-bold">Notificações</h1>
         <p className="text-sm text-muted-foreground">Alertas marítimos, clima e promoções</p>
       </header>
