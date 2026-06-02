@@ -6,12 +6,18 @@ import { store } from "@/lib/app-store";
 
 export default function Login() {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("capitão@floripa.app");
-  const [pwd, setPwd] = useState("oceano123");
+  const [email, setEmail] = useState("");
+  const [pwd, setPwd] = useState("");
+  const [error, setError] = useState("");
 
   const submit = (e) => {
     e.preventDefault();
-    store.login(email.split("@")[0] || "Navegante", email);
+    setError("");
+    const res = store.authenticate(email, pwd);
+    if (!res.ok) {
+      setError(res.error || "Não foi possível entrar.");
+      return;
+    }
     navigate("/home");
   };
 
@@ -27,7 +33,7 @@ export default function Login() {
         <motion.h1 initial={{ y: 20, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.1 }} className="mt-10 text-3xl font-bold">
           Bem-vindo a bordo
         </motion.h1>
-        <p className="mt-2 text-white/70 text-sm">Entre para planejar sua próxima travessia.</p>
+        <p className="mt-2 text-white/70 text-sm">Entre com sua conta ou crie uma nova ao continuar.</p>
       </div>
       <motion.form
         initial={{ y: 30, opacity: 0 }}
@@ -37,8 +43,9 @@ export default function Login() {
         className="relative bg-background text-foreground rounded-t-[2.5rem] px-6 pt-8 pb-10 mt-4 min-h-[60vh] shadow-float"
       >
         <div className="space-y-4">
-          <Field icon={<Mail className="size-4" />} label="E-mail" type="email" value={email} onChange={setEmail} />
-          <Field icon={<Lock className="size-4" />} label="Senha" type="password" value={pwd} onChange={setPwd} />
+          <Field icon={<Mail className="size-4" />} label="E-mail" type="email" value={email} onChange={setEmail} placeholder="seu@email.com" />
+          <Field icon={<Lock className="size-4" />} label="Senha" type="password" value={pwd} onChange={setPwd} placeholder="••••••••" />
+          {error && <p className="text-xs text-destructive font-medium">{error}</p>}
           <div className="text-right">
             <button type="button" className="text-xs text-primary font-medium hover:underline">Esqueci minha senha</button>
           </div>
@@ -46,21 +53,24 @@ export default function Login() {
         <button type="submit" className="mt-6 w-full bg-gradient-ocean text-white font-semibold rounded-2xl py-4 shadow-card flex items-center justify-center gap-2 active:scale-[0.99] transition">
           Entrar <ArrowRight className="size-4" />
         </button>
-        <p className="mt-8 text-center text-sm text-muted-foreground">
-          Novo por aqui? <Link to="/signup" className="text-primary font-semibold">Criar conta</Link>
+        <p className="mt-4 text-center text-xs text-muted-foreground">
+          Se ainda não tiver conta, criaremos uma automaticamente.
+        </p>
+        <p className="mt-6 text-center text-sm text-muted-foreground">
+          Prefere o cadastro completo? <Link to="/signup" className="text-primary font-semibold">Criar conta</Link>
         </p>
       </motion.form>
     </div>
   );
 }
 
-function Field({ icon, label, type, value, onChange }) {
+function Field({ icon, label, type, value, onChange, placeholder }) {
   return (
     <label className="block">
       <span className="text-xs font-medium text-muted-foreground">{label}</span>
       <div className="mt-1 flex items-center gap-2 rounded-2xl border border-border bg-input/40 px-4 py-3 focus-within:ring-2 focus-within:ring-ring">
         <span className="text-muted-foreground">{icon}</span>
-        <input type={type} value={value} onChange={(e) => onChange(e.target.value)} required className="w-full bg-transparent outline-none text-sm" />
+        <input type={type} value={value} onChange={(e) => onChange(e.target.value)} required placeholder={placeholder} className="w-full bg-transparent outline-none text-sm" />
       </div>
     </label>
   );

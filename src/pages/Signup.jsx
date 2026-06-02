@@ -9,10 +9,20 @@ export default function Signup() {
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
 
+  const [error, setError] = useState("");
+
   const submit = (e) => {
     e.preventDefault();
-    if (!name || !email || pwd.length < 4) return;
-    store.login(name, email);
+    setError("");
+    if (!name || !email || pwd.length < 4) {
+      setError("Preencha todos os campos (senha com 4+ caracteres).");
+      return;
+    }
+    const res = store.signup(name, email, pwd);
+    if (!res.ok) {
+      setError(res.error || "Não foi possível criar a conta.");
+      return;
+    }
     navigate("/home");
   };
 
@@ -32,6 +42,7 @@ export default function Signup() {
         <Field icon={<User className="size-4" />} label="Nome completo" value={name} onChange={setName} />
         <Field icon={<Mail className="size-4" />} label="E-mail" type="email" value={email} onChange={setEmail} />
         <Field icon={<Lock className="size-4" />} label="Senha" type="password" value={pwd} onChange={setPwd} />
+        {error && <p className="text-xs text-destructive font-medium">{error}</p>}
         <button className="mt-4 w-full bg-gradient-ocean text-white font-semibold rounded-2xl py-4 shadow-card flex items-center justify-center gap-2">
           Criar conta <ArrowRight className="size-4" />
         </button>

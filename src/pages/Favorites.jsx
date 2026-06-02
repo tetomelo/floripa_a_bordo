@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { Heart, Clock, Trash2, Ship } from "lucide-react";
+import { Heart, Clock, Trash2, Ship, ArrowLeft } from "lucide-react";
 import AppShell from "@/components/AppShell.jsx";
 import { useApp, store } from "@/lib/app-store";
 import { suggestions, terminals } from "@/lib/mock-data";
@@ -12,6 +12,13 @@ export default function Favorites() {
   return (
     <AppShell>
       <header className="px-5 pt-12 pb-4">
+        <button
+          onClick={() => navigate(-1)}
+          className="size-9 grid place-items-center rounded-full bg-secondary mb-3"
+          aria-label="Voltar"
+        >
+          <ArrowLeft className="size-4" />
+        </button>
         <h1 className="text-2xl font-bold">Favoritos</h1>
         <p className="text-sm text-muted-foreground">Suas rotas salvas e histórico recente</p>
       </header>
