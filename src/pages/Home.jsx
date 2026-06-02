@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Search, MapPin, Navigation2, Zap, DollarSign, Sparkles, Waves, Anchor } from "lucide-react";
+import { Search, MapPin, Navigation2, Zap, DollarSign, Sparkles, Waves, Anchor, Ship } from "lucide-react";
 import AppShell from "@/components/AppShell.jsx";
 import ClientOnly from "@/components/ClientOnly.jsx";
 import FloripaMap from "@/components/FloripaMap.jsx";
