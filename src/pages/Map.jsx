@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
-import { MapPin, Navigation2, ArrowLeft, Crosshair, Sparkles, Search, X, Map as MapIcon } from "lucide-react";
+import { motion } from "framer-motion";
+import { MapPin, Navigation2, ArrowLeft, Crosshair, Sparkles, Search, X } from "lucide-react";
 import AppShell from "@/components/AppShell.jsx";
 import ClientOnly from "@/components/ClientOnly.jsx";
 import FloripaMap from "@/components/FloripaMap.jsx";
@@ -16,7 +16,6 @@ export default function MapPage() {
   const [originQuery, setOriginQuery] = useState("");
   const [destQuery, setDestQuery] = useState("");
   const [focused, setFocused] = useState(null);
-  const [mapActive, setMapActive] = useState(false);
 
   const activeQuery = focused === "origin" ? originQuery : destQuery;
   const matches = useMemo(() => {
@@ -74,33 +73,10 @@ export default function MapPage() {
 
   return (
     <AppShell>
-      <div className={`absolute inset-0 pb-28 transition-opacity duration-700 ${mapActive ? "opacity-100" : "opacity-40"}`}>
+      <div className="absolute inset-0 pb-28">
         <ClientOnly fallback={<div className="size-full bg-ocean-light animate-pulse" />}>
           <FloripaMap origin={origin?.coords} destination={destination?.coords} onMapClick={handleClick} />
         </ClientOnly>
-
-        <AnimatePresence>
-          {!mapActive && (
-            <motion.button
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.4 }}
-              onClick={() => setMapActive(true)}
-              className="absolute inset-0 flex flex-col items-center justify-center bg-black/25 backdrop-blur-[2px] z-[500] cursor-pointer"
-            >
-              <motion.div
-                initial={{ scale: 0.9 }}
-                animate={{ scale: 1 }}
-                transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                className="glass rounded-2xl px-6 py-4 shadow-card border border-white/40 flex flex-col items-center gap-2"
-              >
-                <MapIcon className="size-8 text-white/90" />
-                <span className="text-sm font-semibold text-white/90">Toque para explorar o mapa</span>
-              </motion.div>
-            </motion.button>
-          )}
-        </AnimatePresence>
       </div>
 
       <div className="relative px-4 pt-12" style={{ zIndex: 1000 }}>
