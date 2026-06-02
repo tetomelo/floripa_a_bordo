@@ -1,6 +1,6 @@
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Search, MapPin, Navigation2, Zap, DollarSign, Sparkles, Waves, Anchor, Ship } from "lucide-react";
+import { Search, MapPin, Navigation2, Zap, DollarSign, Sparkles, Waves, Anchor, Ship, Heart } from "lucide-react";
 import AppShell from "@/components/AppShell.jsx";
 import ClientOnly from "@/components/ClientOnly.jsx";
 import FloripaMap from "@/components/FloripaMap.jsx";
@@ -16,7 +16,7 @@ const typeMeta = {
 };
 
 export default function Home() {
-  const { user, recentTrips } = useApp();
+  const { user, recentTrips, favorites } = useApp();
   const navigate = useNavigate();
 
   return (
@@ -78,25 +78,36 @@ export default function Home() {
             const Icon = meta.icon;
             const from = terminals.find((t) => t.id === s.from)?.name;
             const to = terminals.find((t) => t.id === s.to)?.name;
+            const isFav = favorites.includes(s.id);
             return (
-              <motion.button
+              <motion.div
                 whileTap={{ scale: 0.98 }}
                 key={s.id}
-                onClick={() => { store.setRoute(s); navigate("/route-result"); }}
                 className="w-full text-left rounded-2xl bg-card border border-border p-4 shadow-card flex items-center gap-3"
               >
-                <div className={`size-10 rounded-xl bg-secondary grid place-items-center ${meta.color}`}>
-                  <Icon className="size-5" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="text-xs text-muted-foreground">{meta.label}</div>
-                  <div className="font-semibold text-sm truncate">{from} → {to}</div>
-                  <div className="text-xs text-muted-foreground">
-                    {s.durationMin} min · {s.distanceKm} km · R$ {s.priceBRL.toFixed(2)}
+                <button
+                  onClick={() => { store.setRoute(s); navigate("/route-result"); }}
+                  className="flex flex-1 items-center gap-3 min-w-0 text-left"
+                >
+                  <div className={`size-10 rounded-xl bg-secondary grid place-items-center ${meta.color}`}>
+                    <Icon className="size-5" />
                   </div>
-                </div>
-                <div className="text-primary text-xs font-semibold">Ver →</div>
-              </motion.button>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs text-muted-foreground">{meta.label}</div>
+                    <div className="font-semibold text-sm truncate">{from} → {to}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {s.durationMin} min · {s.distanceKm} km · R$ {s.priceBRL.toFixed(2)}
+                    </div>
+                  </div>
+                </button>
+                <button
+                  onClick={(e) => { e.stopPropagation(); store.toggleFav(s.id); }}
+                  aria-label={isFav ? "Remover dos favoritos" : "Favoritar rota"}
+                  className={`size-9 grid place-items-center rounded-full transition-colors ${isFav ? "bg-destructive/15 text-destructive" : "bg-secondary text-muted-foreground"}`}
+                >
+                  <Heart className={`size-4 ${isFav ? "fill-current" : ""}`} />
+                </button>
+              </motion.div>
             );
           })}
         </div>
